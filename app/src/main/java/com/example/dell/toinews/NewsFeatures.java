@@ -12,6 +12,15 @@ public class NewsFeatures {
     private Bitmap thumbnail;
     private String dateTime;
 
+    public NewsFeatures(String author, String title, String description, URL articleUrl,
+                        Bitmap thumbnail, String dateTime){
+        this.author = author;
+        this.title = title;
+        this.description = description;
+        this.articleUrl = articleUrl;
+        this.thumbnail = thumbnail;
+        this.dateTime = dateTime;
+    }
     public String getAuthor() {
         return author;
     }
@@ -35,17 +44,6 @@ public class NewsFeatures {
     public String getDateTime() {
         return dateTime;
     }
-
-    public NewsFeatures(String author, String title, String description, URL articleUrl,
-                        Bitmap thumbnail, String dateTime){
-      this.author = author;
-      this.title = title;
-      this.description = description;
-      this.articleUrl = articleUrl;
-      this.thumbnail = thumbnail;
-      this.dateTime = dateTime;
-
-  }
 
 
 }
