@@ -1,6 +1,13 @@
 package com.example.dell.toinews;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -33,6 +41,8 @@ public class QueryUtils {
         return extractNews(jsonResponse);
 
     }
+
+
 
     private URL createUrl(String requestUrl) {
         //in this method
@@ -103,5 +113,38 @@ public class QueryUtils {
         }
         return stringBuilder.toString();
     }
+    private List<NewsFeatures> extractNews(String newsjson) {
+        //in this method we are going to do the real task of extracting the news
+        //which is in json format
+        if(TextUtils.isEmpty(newsjson)){
+            return null;
+        }
+        //creating an array List to store all the news that we are going to fetch
+        List<NewsFeatures> newsFeatures = new ArrayList<>();
+        try{
+            JSONObject baseJsonResponse = new JSONObject(newsjson);
 
+            JSONArray newsArray = baseJsonResponse.getJSONArray("articles");
+            for(int i=1;i<newsArray.length();i++){
+                JSONObject currentNews = newsArray.getJSONObject(i);
+                String author = currentNews.getString("author");
+                String title = currentNews.getString("title");
+                String description = currentNews.getString("description");
+                String dateTime = currentNews.getString("publishedAt");
+                URL articleUrl = createUrl(currentNews.getString("url"));
+                URL imageUrl = createUrl(currentNews.getString("urlToImage"));
+                Bitmap image = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
+
+                NewsFeatures newsObject = new NewsFeatures(author,title,description,articleUrl,image,dateTime);
+                newsFeatures.add(newsObject);
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return newsFeatures;
+    }
 }
