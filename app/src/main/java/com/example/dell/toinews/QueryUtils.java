@@ -72,7 +72,7 @@ public class QueryUtils {
                 Timber.e("makeHttpRequest: %s", urlConnection.getErrorStream());
             }
         }
-        catch (IOException e){
+        catch (Exception e){
             e.printStackTrace();
         }
         finally {
