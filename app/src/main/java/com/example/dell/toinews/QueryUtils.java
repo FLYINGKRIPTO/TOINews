@@ -27,7 +27,7 @@ public class QueryUtils {
     // and JSON Parsing
     //here we have created a method named fetchNews whose return type is List of Generic type
     //which can take an object as an input
-    private List<NewsFeatures> fetchNews(String requestUrl){
+    public static List<NewsFeatures> fetchNews(String requestUrl){
 
         //here we are passing the requesturl to another method which is createUrl
         URL url = createUrl(requestUrl);
@@ -44,7 +44,7 @@ public class QueryUtils {
 
 
 
-    private URL createUrl(String requestUrl) {
+    private static URL createUrl(String requestUrl) {
         //in this method
         URL url =null;
         try{
@@ -56,7 +56,7 @@ public class QueryUtils {
         return url;
     }
 
-    private String makeHttpRequest(URL url) {
+    private static String makeHttpRequest(URL url) {
         String jsonResponse = "";
         if(url==null){
             return jsonResponse;
@@ -100,7 +100,7 @@ public class QueryUtils {
 
     }
 
-    private String readFromStream(InputStream inputStream) throws IOException {
+    private static String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         if (inputStream!=null){
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
@@ -113,7 +113,7 @@ public class QueryUtils {
         }
         return stringBuilder.toString();
     }
-    private List<NewsFeatures> extractNews(String newsjson) {
+    private static List<NewsFeatures> extractNews(String newsjson) {
         //in this method we are going to do the real task of extracting the news
         //which is in json format
         if(TextUtils.isEmpty(newsjson)){
