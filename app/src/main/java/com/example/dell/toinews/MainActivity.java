@@ -64,10 +64,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoadFinished(Loader<List<NewsFeatures>> loader, List<NewsFeatures> data) {
          if(data!=null&&!data.isEmpty()){
              newsAdapter.addAll(data);
+             progressBar.setVisibility(View.GONE);
          }
          else{
              Timber.d("Reached here");
              newsAdapter.clear();
+
              }
     }
     @Override
