@@ -3,7 +3,6 @@ package com.example.dell.toinews;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +19,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
 
 public class QueryUtils {
     private static final String TAG = QueryUtils.class.getName();
@@ -36,14 +36,9 @@ public class QueryUtils {
             jsonResponse = makeHttpRequest(url);
         }
         catch (Exception e){
-
         }
         return extractNews(jsonResponse);
-
     }
-
-
-
     private static URL createUrl(String requestUrl) {
         //in this method
         URL url =null;
@@ -51,12 +46,11 @@ public class QueryUtils {
             url = new URL(requestUrl);
         }
         catch (MalformedURLException e){
-            Log.e(TAG, "createUrl: " );
+            Timber.e("createUrl: ");
         }
         return url;
     }
-
-    private static String makeHttpRequest(URL url) {
+    private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
         if(url==null){
             return jsonResponse;
@@ -69,16 +63,14 @@ public class QueryUtils {
             urlConnection.setReadTimeout(10000);
             urlConnection.setConnectTimeout(15000);
             urlConnection.connect();
-
             if(urlConnection.getResponseCode()==200){
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             }
             else
             {
-                Log.e(TAG, "makeHttpRequest: ");
+                Timber.e("makeHttpRequest: %s", urlConnection.getErrorStream());
             }
-
         }
         catch (IOException e){
             e.printStackTrace();
@@ -89,17 +81,11 @@ public class QueryUtils {
                 urlConnection.disconnect();
             }
             if(inputStream!=null){
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                inputStream.close();
             }
             return jsonResponse;
         }
-
     }
-
     private static String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         if (inputStream!=null){
@@ -124,9 +110,9 @@ public class QueryUtils {
         try{
             JSONObject baseJsonResponse = new JSONObject(newsjson);
 
-            JSONArray newsArray = baseJsonResponse.getJSONArray("articles");
-            for(int i=1;i<newsArray.length();i++){
-                JSONObject currentNews = newsArray.getJSONObject(i);
+            JSONArray jsonArray = baseJsonResponse.getJSONArray("articles");
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject currentNews = jsonArray.getJSONObject(i);
                 String author = currentNews.getString("author");
                 String title = currentNews.getString("title");
                 String description = currentNews.getString("description");
@@ -138,8 +124,6 @@ public class QueryUtils {
                 NewsFeatures newsObject = new NewsFeatures(author,title,description,articleUrl,image,dateTime);
                 newsFeatures.add(newsObject);
             }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -2,9 +2,10 @@ package com.example.dell.toinews;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.util.Log;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 public class NewsLoader extends AsyncTaskLoader<List<NewsFeatures>> {
     private static final String TAG = NewsLoader.class.getName();
@@ -17,13 +18,13 @@ public class NewsLoader extends AsyncTaskLoader<List<NewsFeatures>> {
     @Override
     protected void onStartLoading() {
         forceLoad();
-        Log.d(TAG, "onStartLoading: onStartMethod ");
+        Timber.d("onStartLoading: onStartMethod ");
     }
 
     @Override
     public List<NewsFeatures> loadInBackground() {
         if(mUrl==null){
-            Log.d(TAG, "loadInBackground: ");
+            Timber.d("loadInBackground: ");
             return null;
         }
         List<NewsFeatures> newsFeatures = QueryUtils.fetchNews(mUrl);

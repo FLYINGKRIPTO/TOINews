@@ -29,7 +29,6 @@ public class NewsAdapter extends ArrayAdapter<NewsFeatures> {
           view = LayoutInflater.from(getContext()).inflate(R.layout.list,parent,false);
          }
          NewsFeatures newsFeatures = list.get(position);
-
         ImageView image = view.findViewById(R.id.thumbnail);
         TextView date = view.findViewById(R.id.date);
         TextView title = view.findViewById(R.id.title);
